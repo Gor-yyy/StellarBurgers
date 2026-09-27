@@ -27,9 +27,8 @@ public class RegistrationTest{
     }
 @Test
     public void isRegistrationSuccessful(){
-registerPage.registerSuccessfully("Dav", "dav.15666@yandex.ru", "password1234");
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    wait.until(ExpectedConditions.elementToBeClickable(registerPage.loginButton));
+registerPage.registerSuccessfully("Dav", "dav.1463@yandex.ru", "password1234");
+    registerPage.waitTab();
     assertTrue(registerPage.isLoginButtonDisplayed());
 
 }

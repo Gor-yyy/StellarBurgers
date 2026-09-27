@@ -16,7 +16,7 @@ public class ConstructorTest {
 
     @Before
     public void setUp() {
-        driver = BrowserFactory.createDriver("yandex");
+        driver = BrowserFactory.createDriver("chrome");
         driver.get(BASE_URL);
 
         navigateToConstructorSection = new NavigateToConstructorSection(driver);
