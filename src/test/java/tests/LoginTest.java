@@ -6,13 +6,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
+import pages.CreateUser;
 import pages.LoginPage;
 
+import java.util.UUID;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+
+import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class LoginTest {
 
+    String token;
+    private CreateUser createUser;
     private WebDriver driver;
     private LoginPage loginPage;
     private final String browser;
@@ -34,6 +43,19 @@ public class LoginTest {
 
     @Before
     public void setUp() {
+
+        String email = UUID.randomUUID() + "@yandex.ru";
+        createUser = new CreateUser(email, "password", "name");
+
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .body(createUser)
+                .when()
+                .post("https://stellarburgers.education-services.ru/api/auth/register");
+
+        token = response.path("accessToken");
+
+
         driver = BrowserFactory.createDriver(browser);
         driver.get(BASE_URL);
         loginPage = new LoginPage(driver);
@@ -41,6 +63,16 @@ public class LoginTest {
 
     @After
     public void tearDown() {
+
+
+        if (token != null) {
+            given()
+                    .header("Authorization", token)
+                    .when()
+                    .delete("https://stellarburgers.education-services.ru/api/auth/user");
+        }
+
+
         if (driver != null) {
             driver.quit();
         }
@@ -49,44 +81,44 @@ public class LoginTest {
     @Test
     public void isLoginViaLoginToAccountButtonSuccessful() {
         loginPage.loginViaLoginToAccountButton(
-                "stella.burger@yandex.ru",
-                "stella123"
+                createUser.getEmail(),
+                createUser.getPassword()
         );
-        loginPage.waitTab();
 
+        loginPage.waitTab();
         assertTrue(loginPage.isOrderButtonDisplayed());
     }
 
     @Test
     public void isLoginViaPersonalAccountButtonSuccessful() {
         loginPage.loginViaPersonalAccountButton(
-                "stella.burger@yandex.ru",
-                "stella123"
+                createUser.getEmail(),
+                createUser.getPassword()
         );
-        loginPage.waitTab();
 
+        loginPage.waitTab();
         assertTrue(loginPage.isOrderButtonDisplayed());
     }
 
     @Test
     public void loginViaRegistrationForm() {
         loginPage.loginViaRegistrationForm(
-                "stella.burger@yandex.ru",
-                "stella123"
+                createUser.getEmail(),
+                createUser.getPassword()
         );
-        loginPage.waitTab();
 
+        loginPage.waitTab();
         assertTrue(loginPage.isOrderButtonDisplayed());
     }
 
     @Test
     public void isLoginViaForgotPasswordFormSuccessful() {
         loginPage.loginViaForgotPasswordForm(
-                "stella.burger@yandex.ru",
-                "stella123"
+                createUser.getEmail(),
+                createUser.getPassword()
         );
-        loginPage.waitTab();
 
+        loginPage.waitTab();
         assertTrue(loginPage.isOrderButtonDisplayed());
     }
 }

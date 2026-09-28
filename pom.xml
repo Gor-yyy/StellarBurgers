@@ -40,11 +40,26 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Allure для @Step в Page Object -->
+        <!-- Allure для @Step -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-java-commons</artifactId>
             <version>2.29.1</version>
+        </dependency>
+
+        <!-- REST Assured -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.5.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.2</version>
         </dependency>
 
     </dependencies>
@@ -59,7 +74,6 @@
                 <version>3.5.2</version>
 
                 <configuration>
-
                     <properties>
                         <property>
                             <name>listener</name>
@@ -72,8 +86,14 @@
                             ${project.build.directory}/allure-results
                         </allure.results.directory>
                     </systemPropertyVariables>
-
                 </configuration>
+            </plugin>
+
+            <!-- Генерация Allure отчёта -->
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.12.0</version>
             </plugin>
 
         </plugins>

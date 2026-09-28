@@ -13,8 +13,10 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 
 import java.time.Duration;
+import java.util.UUID;
 
 public class RegistrationTest{
+    String email = UUID.randomUUID() + "@yandex.ru";
     WebDriver driver;
     RegisterPage registerPage;
     protected static final String BASE_URL  = "https://stellarburgers.education-services.ru/";
@@ -25,13 +27,14 @@ public class RegistrationTest{
         driver.get(BASE_URL);
         registerPage = new RegisterPage(driver);
     }
-@Test
+    @Test
     public void isRegistrationSuccessful(){
-registerPage.registerSuccessfully("Dav", "dav.1463@yandex.ru", "password1234");
-    registerPage.waitTab();
-    assertTrue(registerPage.isLoginButtonDisplayed());
+        registerPage.registerSuccessfully("Dav", email
+                , "password1234");
+        registerPage.waitTab();
+        assertTrue(registerPage.isLoginButtonDisplayed());
 
-}
+    }
     @After
     public void tearDown() {
         driver.quit();
@@ -40,6 +43,6 @@ registerPage.registerSuccessfully("Dav", "dav.1463@yandex.ru", "password1234");
     @Test
     public void isInvalidPasswordErrorDisplayed(){
         registerPage.registerSuccessfully("Dav", "dav.15855@yandex.ru", "123");
-      registerPage.getInvalidPasswordErrorText();
+        registerPage.getInvalidPasswordErrorText();
     }
 }
